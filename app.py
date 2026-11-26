@@ -1,7 +1,7 @@
 # importació de llibreries
 
 import torch
-import gradio as gr
+import streamlit as st
 
 from transformers import AutoProcessor, MusicgenForConditionalGeneration
 
@@ -44,22 +44,29 @@ def generar_musica(text):
     )
 
 
-# interfície Gradio
+# interfície Streamlit
 
-interficie = gr.Interface(
-    fn=generar_musica,
-    inputs=gr.Textbox(
-        lines=2,
-        label="Descripció de la música"
-    ),
-    outputs=gr.Audio(
-        label="Música generada"
-    ),
-    title="Generador de música amb MusicGen",
-    description="Introdueix una descripció i genera una peça musical."
+st.title("Generador de música amb MusicGen")
+
+st.write(
+    "Introdueix una descripció i genera una peça musical."
 )
 
+text = st.text_input(
+    "Descripció de la música"
+)
 
-# executar aplicació
+if st.button("Generar música"):
 
-interficie.launch()
+    if text.strip():
+
+        with st.spinner("Generant música..."):
+            sampling_rate, audio_data = generar_musica(text)
+
+        st.audio(
+            audio_data,
+            sample_rate=sampling_rate
+        )
+
+    else:
+        st.warning("Introdueix una descripció.")
