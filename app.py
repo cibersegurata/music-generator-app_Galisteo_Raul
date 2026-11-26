@@ -17,9 +17,12 @@ model_name = "facebook/musicgen-small"
 
 processor = AutoProcessor.from_pretrained(model_name)
 
-model = MusicgenForConditionalGeneration.from_pretrained(model_name)
-model.to(device)
+model = MusicgenForConditionalGeneration.from_pretrained(
+    model_name,
+    low_cpu_mem_usage=False
+)
 
+model.to(device)
 
 # funció de generació musical
 
